@@ -1,0 +1,139 @@
+# MULTI ROBOT MAP PARAMETER
+robot_id: 1
+robot_num: 2 # desired number of robots in the network
+robot_name: ugv # name of this robot
+# map in this robot to global map. For multi-robot map transimission
+
+# GENERAL OCCUPANCY MAP PARAMETER
+sensor_input_mode: 1 # 0: depth image (default) 1: pointcloud 
+localization_mode: 1 # 0: pose (default) 1: odom
+<<<<<<< HEAD
+depth_image_topic: /depth
+
+=======
+depth_image_topic: /depth_ugv
+# point_cloud_topic: /theia/os_cloud_node/points
+# point_cloud_topic: /camera/depth/points
+# pose_topic: /ugv/mavros/local_position/pose
+# odom_topic: /vins_estimator/odometry
+>>>>>>> d413164ad49c977251485656269fc30bd7a70a58
+odom_topic: /odom_ugv
+point_cloud_topic: /point_cloud_ugv
+raw_detection_topic: /bbox_ugv
+# odom_topic: /spot/odom
+# point_cloud_topic: /ouster/points
+# raw_detection_topic: /yolo/detection
+
+# robot size
+robot_size: [1.1, 0.8, 0.8] #1.15, 1.05, 0.0
+
+# Camera Parameters
+# depth_intrinsics: [554.254691191187, 554.254691191187, 320.5, 240.5] # fx,  fy, cx, cy
+<<<<<<< HEAD
+depth_intrinsics: [320, 320, 320, 240.0] # isaac sim uav
+=======
+depth_intrinsics: [640, 640, 640, 320.0]
+# color_algined_to_depth_intrinsics: [320, 320, 320, 240.0] # isaac sim uav
+# depth_intrinsics: [408.5106506347656, 229.78724670410156, 640.0, 360.0] # isaac sim jetbot
+# depth_intrinsics: [1130.09, 1466.00, 640.0, 360.0] # isaac sim uav
+>>>>>>> d413164ad49c977251485656269fc30bd7a70a58
+depth_scale_factor: 1000 # 1000 for Intel Realsense Camera
+depth_min_value: 0.5
+depth_max_value: 5.0
+depth_filter_margin: 2 # filter
+depth_skip_pixel: 2 # filter
+# image_cols: 640
+# image_rows: 480
+
+# jetbot camera isaac sim 
+image_cols: 1280
+image_rows: 720
+# body_to_camera: [1.0,  0.0,  0.0,  0.00,
+#                   0.0,  1.0,  0.0,  0.0 ,   
+#                   0.0,  0.0,  1.0,  0.43,
+#                   0.0,  0.0,  0.0,  1.0] # or body to lidar
+
+# isaac husky camera
+# body_to_camera: [0.0,  0.0,  1.0,  0.273,
+#                 -1.0,  0.0,  0.0,  0.0 ,   
+#                  0.0, -1.0,  0.0,  0.324,
+#                  0.0,  0.0,  0.0,  1.0]
+<<<<<<< HEAD
+
+# # os_lidar isaac sim
+# body_to_camera: [1.0,  0.0,  0.0,  0.0,
+#                  0.0,  1.0,  0.0,  0.0,   
+#                  0.0,  0.0,  1.0,  0.6,
+#                  0.0,  0.0,  0.0,  1.0]
+
+# ouster lidar
+body_to_camera: [1.0,  0.0,  0.0,  0.40,
+                  0.0,  1.0,  0.0,  0.0 ,   
+                  0.0,  0.0,  1.0,  0.43,
+                  0.0,  0.0,  0.0,  1.0] # or body to lidar
+=======
+# os_lidar isaac sim
+body_to_camera: [1.0,  0.0,  0.0,  0.0,
+                 0.0,  1.0,  0.0,  0.0,   
+                 0.0,  0.0,  1.0,  0.6,
+                 0.0,  0.0,  0.0,  1.0]
+>>>>>>> d413164ad49c977251485656269fc30bd7a70a58
+
+global_to_map_1: [1.0,  0.0,  0.0,  0.0,
+                  0.0,  1.0,  0.0,  0.0,   
+                  0.0,  0.0,  1.0,  0.0,
+                  0.0,  0.0,  0.0,  1.0]
+global_to_map_2: [1.0,  0.0,  0.0, -2.0,
+                  0.0,  1.0,  0.0, -2.0,   
+                  0.0,  0.0,  1.0,  0.0,
+                  0.0,  0.0,  0.0,  1.0]
+
+
+# Raycasting
+raycast_max_length: 5.0
+p_hit: 0.70
+p_miss: 0.35
+p_min: 0.12
+p_max: 0.97
+p_occ: 0.80
+
+
+# Map
+map_resolution: 0.1
+<<<<<<< HEAD
+ground_height: -0.2 # m
+=======
+ground_height: -0.1 # m
+# map_size: [25,50, 4] # meter. in x y z direction (reserved size)
+>>>>>>> d413164ad49c977251485656269fc30bd7a70a58
+map_size_max: [10, 20, 2] # meter. in x y z direction (reserved size)
+map_size_min: [-10, -8, -1] # meter. in x y z direction (reserved size)
+local_update_range: [5, 5, 4]
+local_bound_inflation: 3.0 # inflate local bound in meter
+clean_local_map: false
+preload_map_dir: /home/cerlab-ugv/catkin_ws/static_map.pcd
+
+# detection
+sensor_fusion_mode: 1 # 0: depth image, 1: lidar-camera fusion image
+object_map_duration: 0.1
+detect_threshold: 0.2 #0.85
+object_of_interest: [56] #[56, 57, 60, 62] 
+dbscan_min_points_cluster: 18 # 30
+dbscan_search_range_epsilon: 0.2 # 0.06
+view_angle_intervals: 8 # number of intervals
+visible_distance: 3.0 # m. visible distance for semantic mask visibility check
+invisible_range: 0.628318530711 #3.14159265359/5 rad. invisible range in the rear camera for mask visibility check
+voxel_filter_thresh: 1 # min num of objct dense point cloud in a unit voxel
+object_track_thresh: 0.2
+
+# visualziation
+local_map_size: [15, 15, 3] # meter. in x y z direction (only for visualization)
+max_height_visualization: 3.0 # m
+<<<<<<< HEAD
+visualize_global_map: false
+verbose: false
+=======
+visualize_global_map: true
+verbose: false
+
+>>>>>>> d413164ad49c977251485656269fc30bd7a70a58

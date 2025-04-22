@@ -1,0 +1,64 @@
+<launch>
+    <!-- Load parameters into the /occupancy_map namespace -->
+    <rosparam file="$(find map_manager)/cfg/occupancy_map_param.yaml" ns="/occupancy_map" />
+    <rosparam file="$(find map_manager)/cfg/object_map_param.yaml" ns="/occupancy_map" />
+
+    <!-- Launch the occupancy_map_node -->
+    <node pkg="map_manager" type="occupancy_map_node" name="occupancy_map_node" output="screen">
+        <!--  The key here: Remap the node's namespace to the one where the parameters are loaded -->
+    <remap from="~range_sensor_input_mode" to="/occupancy_map/range_sensor_input_mode" />
+    <remap from="~depth_image_topic" to="/occupancy_map/depth_image_topic" />
+	<remap from="~depth_camera_params" to="/occupancy_map/depth_camera_params" />
+	<remap from="~depth_filter_margin" to="/occupancy_map/depth_filter_margin" />
+	<remap from="~depth_skip_pixel" to="/occupancy_map/depth_skip_pixel" />
+	<remap from="~point_cloud_topic" to="/occupancy_map/point_cloud_topic" />
+	<remap from="~sensor_fusion_mode" to="/occupancy_map/sensor_fusion_mode" />
+	<remap from="~pano_cam_params" to="/occupancy_map/pano_cam_params" />
+	<remap from="~localization_mode" to="/occupancy_map/localization_mode" />
+	<remap from="~odom_topic" to="/occupancy_map/odom_topic" />
+	<remap from="~raw_detection_topic" to="/occupancy_map/raw_detection_topic" />
+	<remap from="~dense_cloud_topic" to="/occupancy_map/dense_cloud_topic" />
+	<remap from="~robot_size" to="/occupancy_map/robot_size" />
+	<remap from="~fovV" to="/occupancy_map/fovV" />
+	<remap from="~depth_scale_factor" to="/occupancy_map/depth_scale_factor" />
+	<remap from="~depth_min_value" to="/occupancy_map/depth_min_value" />
+	<remap from="~depth_max_value" to="/occupancy_map/depth_max_value" />
+	<remap from="~image_cols" to="/occupancy_map/image_cols" />
+	<remap from="~image_rows" to="/occupancy_map/image_rows" />
+	<remap from="~body_to_range_sensor" to="/occupancy_map/body_to_range_sensor" />
+	<remap from="~body_to_color_sensor" to="/occupancy_map/body_to_color_sensor" />
+	<remap from="~raycast_max_length" to="/occupancy_map/raycast_max_length" />
+	<remap from="~p_hit" to="/occupancy_map/p_hit" />
+	<remap from="~p_miss" to="/occupancy_map/p_miss" />
+	<remap from="~p_min" to="/occupancy_map/p_min" />
+	<remap from="~p_max" to="/occupancy_map/p_max" />
+	<remap from="~p_occ" to="/occupancy_map/p_occ" />
+	<remap from="~map_resolution" to="/occupancy_map/map_resolution" />
+	<remap from="~ground_height" to="/occupancy_map/ground_height" />
+	<remap from="~map_size_max" to="/occupancy_map/map_size_max" />
+	<remap from="~map_size_min" to="/occupancy_map/map_size_min" />
+	<remap from="~local_update_range" to="/occupancy_map/local_update_range" />
+	<remap from="~local_bound_inflation" to="/occupancy_map/local_bound_inflation" />
+	<remap from="~clean_local_map" to="/occupancy_map/clean_local_map" />
+	<remap from="~preload_map_dir" to="/occupancy_map/preload_map_dir" />
+	<remap from="~object_map_duration" to="/occupancy_map/object_map_duration" />
+	<remap from="~detect_threshold" to="/occupancy_map/detect_threshold" />
+	<remap from="~object_of_interest" to="/occupancy_map/object_of_interest" />
+	<remap from="~object_bbox_color" to="/occupancy_map/object_bbox_color" />
+	<remap from="~object_class_label" to="/occupancy_map/object_class_label" />
+	<remap from="~dbscan_downsample_factor" to="/occupancy_map/dbscan_downsample_factor" />
+	<remap from="~dbscan_min_points_cluster" to="/occupancy_map/dbscan_min_points_cluster" />
+	<remap from="~dbscan_search_range_epsilon" to="/occupancy_map/dbscan_search_range_epsilon" />
+	<remap from="~view_angle_intervals" to="/occupancy_map/view_angle_intervals" />
+	<remap from="~visible_distance" to="/occupancy_map/visible_distance" />
+	<remap from="~invisible_range" to="/occupancy_map/invisible_range" />
+	<remap from="~voxel_filter_thresh" to="/occupancy_map/voxel_filter_thresh" />
+	<remap from="~object_filter_height" to="/occupancy_map/object_filter_height" />
+	<remap from="~object_track_thresh" to="/occupancy_map/object_track_thresh" />
+	<remap from="~object_merge_thresh" to="/occupancy_map/object_merge_thresh" />
+	<remap from="~local_map_size" to="/occupancy_map/local_map_size" />
+	<remap from="~max_height_visualization" to="/occupancy_map/max_height_visualization" />
+	<remap from="~visualize_global_map" to="/occupancy_map/visualize_global_map" />
+	<remap from="~verbose" to="/occupancy_map/verbose" />
+    </node>
+</launch>

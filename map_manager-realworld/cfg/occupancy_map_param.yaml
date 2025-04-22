@@ -1,0 +1,123 @@
+range_sensor_input_mode: 0 # 0: depth image (default) 1: pointcloud 
+# Camera Parameters
+depth_image_topic: /camera/depth/image_rect_raw
+# depth_camera_params: [554.254691191187, 554.254691191187, 320.5, 240.5] # fx,  fy, cx, cy
+# depth_camera_params: [408.5106506347656, 229.78724670410156, 640.0, 360.0] # isaac sim jetbot
+# depth_camera_params: [320, 320, 320, 240.0] # isaac sim uav
+#depth_camera_params: [908.9105834960938, 909.1548461914062, 629.5079956054688, 375.195556640625]
+depth_camera_params: [424.80474853515625, 424.80474853515625, 
+                      425.89666748046875, 233.81031799316406] # fx, fy, cx, cy
+
+# color_algined_to_depth_intrinsics: [640, 640, 640, 360.0] # isaac sim uav
+depth_filter_margin: 2 # filter
+depth_skip_pixel: 2 # filter
+point_cloud_topic: /cloud_registered
+
+sensor_fusion_mode: 0 # 0: depth image, 1: lidar-camera fusion image
+# panopramic camera on spot
+pano_cam_params: [375, 219.4734627, 1280] # y0, fy, cols
+
+localization_mode: 1 # 0: pose (default) 1: odom
+odom_topic: /Odometry
+raw_detection_topic: /yolo_detector/detected_bounding_boxes
+dense_cloud_topic: /cloud_registered
+
+# robot size
+robot_size: [0.4, 0.4, 0.2] #1.15, 1.05, 0.0
+
+
+# fovH: 84 # degree. 180-1 for lidar
+fovV: 45 # degree. 45 for lidar
+depth_scale_factor: 1000 # 1000 for both Intel Realsense Camera and lidar-pano fusion map
+depth_min_value: 0.2
+depth_max_value: 5.0
+image_cols: 640
+image_rows: 480
+
+# convention: A2B means transform the physical coordinate frame A to the physical coordinate frame B, 
+# not the pose in this coordinate frame
+
+# ouster lidar on spot
+# body_to_range_sensor: [1.0,  0.0,  0.0,  0.0,
+#                   0.0,  1.0,  0.0,  0.0 ,   
+#                   0.0,  0.0,  1.0,  0.644,
+#                   0.0,  0.0,  0.0,  1.0] # or body to lidar
+
+# # os_lidar isaac sim
+# body_to_range_sensor: [1.0,  0.0,  0.0,  0.0,
+#                  0.0,  1.0,  0.0,  0.0,   
+#                  0.0,  0.0,  1.0,  0.6,
+#                  0.0,  0.0,  0.0,  1.0]
+
+
+# camera on isaac uav 
+# body_to_camera: [0.0,  0.0,  1.0,  0.1,
+#                 -1.0,  0.0,  0.0,  0.0 ,   
+#                  0.0, -1.0,  0.0,  0.0,
+#                  0.0,  0.0,  0.0,  1.0]
+
+# camera on isaac husky 
+# body_to_camera: [0.0,  0.0,  1.0,  0.273,
+#                 -1.0,  0.0,  0.0,  0.0 ,   
+#                  0.0, -1.0,  0.0,  0.324,
+#                  0.0,  0.0,  0.0,  1.0]
+body_to_range_sensor: [1.0,  0.0,  0.0,  0.0273,
+                        0.0,  1.0,  0.0,  0.0,   
+                        0.0,  0.0,  1.0,  0.0324,
+                        0.0,  0.0,  0.0,  1.0]
+body_to_color_sensor: [1.0,  0.0,  0.0,  0.0273,
+                        0.0,  1.0,  0.0,  0.0,   
+                        0.0,  0.0,  1.0,  0.0324,
+                        0.0,  0.0,  0.0,  1.0]
+# body_to_range_sensor: [0.0, -1.0, 0.0, 0.0,
+#                       1.0, 0.0, 0.0, 0.273,
+#                       0.0, 0.0, 1.0, 0.324,
+#                       0.0, 0.0, 0.0, 1.0]
+# body_to_color_sensor: [0.0, -1.0, 0.0, 0.0,
+#                       1.0, 0.0, 0.0, 0.273,
+#                       0.0, 0.0, 1.0, 0.324,
+#                       0.0, 0.0, 0.0, 1.0]
+
+# Raycasting
+raycast_max_length: 5.0
+p_hit: 0.70
+p_miss: 0.35
+p_min: 0.12
+p_max: 0.97
+p_occ: 0.80
+
+
+# Map
+map_resolution: 0.1
+ground_height: 0.0 # -0.4 m
+map_size_max: [30, 40, 15] # meter. in x y z direction (reserved size)
+map_size_min: [-30, -40, -1] # meter. in x y z direction (reserved size)
+local_update_range: [5, 5, 3]
+local_bound_inflation: 3.0 # inflate local bound in meter
+clean_local_map: false
+preload_map_dir: /home/cerlab-ugv/catkin_ws/static_map.pcd
+
+# detection
+
+object_map_duration: 0.1
+detect_threshold: 0.90 #0.85
+# object_of_interest: [56, 57, 60, 62] 
+object_of_interest: [24, 42, 56, 62, 64, 66, 73]
+object_bbox_color: [1.0, 0.0, 0.0]
+object_class_label: ["backpack", "cup", "chair", "tv", "mouse", "keyboard", "book"]
+dbscan_downsample_factor: 2
+dbscan_min_points_cluster: 30 # 30
+dbscan_search_range_epsilon: .15 # 0.06
+view_angle_intervals: 8 # number of intervals
+visible_distance: 6.0 # m. visible distance for semantic mask visibility check
+invisible_range: 0.62831853071 #3.14159265359/5 rad. invisible range in the rear camera for mask visibility check
+voxel_filter_thresh: 10
+object_filter_height: 0.05
+object_track_thresh: 0.2
+object_merge_thresh: 0.3
+
+# visualziation
+local_map_size: [20, 20, 5] # meter. in x y z direction (only for visualization)
+max_height_visualization: 5.0 # m
+visualize_global_map: false
+verbose: true

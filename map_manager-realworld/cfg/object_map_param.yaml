@@ -1,0 +1,7 @@
+object_map_resolution: 0.1
+object_map_size: [1.5,1.5,3.0]
+min_mask_score_thresh: 0 # min score to consider a mask
+observe_valid_prob_thresh: 0. # min prob in beta distribution to consider a mask as a valid observation
+observe_invalid_prob_thresh: 0. # max prob in beta distribution to consider a mask as a valid observation
+object_map_debug: false # debug mode: save instance masks
+deubg_root_dir: /home/xiaoyang/spot_ws/debug_data/
