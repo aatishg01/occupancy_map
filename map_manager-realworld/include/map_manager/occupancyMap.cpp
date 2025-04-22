@@ -2417,36 +2417,48 @@ namespace mapManager{
 		this->objectMapVisPub_.publish(cloudMsg);
 	}
 
-	void occMap::publishGlobalObjectDenseCloud(){
-		pcl::PointXYZ pt;
-		pcl::PointCloud<pcl::PointXYZ> denseCloud;
-		std::stack<Eigen::Vector3d> denseCloudStack;
-		std::vector<Eigen::Vector3d> points;
-		for (auto& objectMap : this->objectMapList_){
-			objectMap->getPointCloud(points);
-			for (const auto& point : points){
-				int address = objectMap->posToAddress(point);
-				denseCloudStack = objectMap->getDenseCloudAtVoxel(address);
-				// the denseCloudStack is storing global frame points
-				if (denseCloudStack.size() > this->voxelFilterThresh_){
-					while (not denseCloudStack.empty()){
-						Eigen::Vector3d pointEigen;
-						pointEigen = denseCloudStack.top();
-						pt.x = pointEigen(0); pt.y = pointEigen(1); pt.z = pointEigen(2);
-						denseCloud.push_back(pt);
-						denseCloudStack.pop();
-					}
-				}
-			}
-		}
-		denseCloud.width = denseCloud.points.size();
-		denseCloud.height = 1;
-		denseCloud.is_dense = true;
-		denseCloud.header.frame_id = "map";
-		sensor_msgs::PointCloud2 denseCloudMsg;
-		pcl::toROSMsg(denseCloud, denseCloudMsg);
-		this->objectDenseCloudPub_.publish(denseCloudMsg);
-	}
+    void occMap::publishGlobalObjectDenseCloud() {
+        pcl::PointXYZ pt;
+        pcl::PointCloud<pcl::PointXYZ> denseCloud;
+        std::stack<Eigen::Vector3d> denseCloudStack;
+        std::vector<Eigen::Vector3d> points;
+        
+        for (auto& objectMap : this->objectMapList_) {
+            // Get class ID from object map (assuming getClassId() exists)
+            int classId = objectMap->label_; 
+            bool isTV = (classId == 62);  // TV class ID from your config
+            
+            objectMap->getPointCloud(points);
+            for (const auto& point : points) {
+                int address = objectMap->posToAddress(point);
+                denseCloudStack = objectMap->getDenseCloudAtVoxel(address);
+    
+                // Bypass filter threshold for TVs
+                if (isTV || denseCloudStack.size() > this->voxelFilterThresh_) {
+                    while (!denseCloudStack.empty()) {
+                        Eigen::Vector3d pointEigen = denseCloudStack.top();
+                        pt.x = pointEigen(0); 
+                        pt.y = pointEigen(1); 
+                        pt.z = pointEigen(2);
+                        denseCloud.push_back(pt);
+                        denseCloudStack.pop();
+                    }
+                }
+            }
+            if (isTV) {
+                ROS_INFO("Processing TV object with %zu points", denseCloud.points.size());
+            } 
+        }
+        
+        // Rest of the original code remains the same
+        denseCloud.width = denseCloud.points.size();
+        denseCloud.height = 1;
+        denseCloud.is_dense = true;
+        denseCloud.header.frame_id = "map";
+        sensor_msgs::PointCloud2 denseCloudMsg;
+        pcl::toROSMsg(denseCloud, denseCloudMsg);
+        this->objectDenseCloudPub_.publish(denseCloudMsg);
+    }
 
 	void occMap::updateObjectMapCB(const ros::TimerEvent&){
 		// measure time 

@@ -101,22 +101,29 @@ class YOLOv8Detector:
 
     def postprocess(self, img, results):
         detected_boxes = []
-        for r in results:
-            boxes = r.boxes
-            for box in boxes:
-                # Get coordinates in original image dimensions
-                x1, y1, x2, y2 = map(int, box.xyxy[0].cpu().numpy())
-                conf = box.conf.item()
-                cls = int(box.cls.item())
-                class_name = self.model.names[cls]
-                
-                detected_boxes.append([x1, y1, x2, y2, class_name, cls, conf])
-                
-                # Draw bounding box and label
-                cv2.rectangle(img, (x1, y1), (x2, y2), (255, 255, 0), 2)
-                cv2.putText(img, f'{class_name} {conf:.2f}', (x1, y1 - 10),
-                            cv2.FONT_HERSHEY_SIMPLEX, 0.9, (255, 255, 0), 2)
+        masks = None
+        if hasattr(results[0], "masks") and results[0].masks is not None:
+            masks = results[0].masks.data.cpu().numpy()  # shape: [N, H, W]
+        for idx, box in enumerate(results[0].boxes):
+            x1, y1, x2, y2 = map(int, box.xyxy[0].cpu().numpy())
+            conf = box.conf.item()
+            cls = int(box.cls.item())
+            class_name = self.model.names[cls]
+            
+            detected_boxes.append([x1, y1, x2, y2, class_name, cls, conf])
+
+            # If mask available, compute mask score
+            if masks is not None and idx < masks.shape[0]:
+                mask = masks[idx]
+                mask_score = np.sum(mask > 0.5)  # threshold if needed
+                print(f"Mask score for detection {idx} ({class_name}): {mask_score}")
+
+            # Draw bounding box and label
+            cv2.rectangle(img, (x1, y1), (x2, y2), (255, 255, 0), 2)
+            cv2.putText(img, f'{class_name} {conf:.2f}', (x1, y1 - 10),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.9, (255, 255, 0), 2)
         return img, detected_boxes
+
 
 if __name__ == '__main__':
     rospy.init_node('yolov8_detector', anonymous=True)
