@@ -2447,7 +2447,9 @@ namespace mapManager{
             }
             if (isTV) {
                 ROS_INFO("Processing TV object with %zu points", denseCloud.points.size());
-            } 
+            
+            }
+
         }
         
         // Rest of the original code remains the same
